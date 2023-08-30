@@ -9,6 +9,7 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatcher = useDispatch();
   let textLink = isLogged ? "Sign out" : "Sign in";
+  const { userName } = useSelector(userSelector);
   const logoutButton = () => {
     try {
       if (!!isLogged) {
@@ -31,7 +32,14 @@ const Header = () => {
         />
         <h1 className="sr-only">Argent Bank</h1>
       </Link>
-      <div>
+      <div className="login">
+        {isLogged ? (
+          <Link className="user" to="/user">
+            {userName}
+          </Link>
+        ) : (
+          ""
+        )}
         <button onClick={logoutButton} className="sign-in-button main-nav-item">
           <i className="fa fa-user-circle"></i>
           {textLink}

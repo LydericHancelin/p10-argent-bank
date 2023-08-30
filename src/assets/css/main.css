@@ -12,7 +12,20 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
-
+.login {
+  display: flex;
+}
+.error {
+  color: red;
+  margin: 0;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+.login > a {
+  width: 12rem;
+  display: flex;
+  align-items: center;
+}
 .main {
   flex: 1;
   min-height: calc(100vh - 170px);
@@ -194,7 +207,7 @@ main {
   display: flex;
   flex-direction: column;
   text-align: left;
-  margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 
 .input-wrapper label {
