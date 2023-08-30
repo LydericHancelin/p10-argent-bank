@@ -13,17 +13,14 @@ const Login = () => {
   const [asError, setAsError] = useState(false);
   const errorMessage = "Invalid login";
   const { remember, email, password } = useSelector(userSelector);
-
+  const [rememberMe, setRememberMe] = useState(remember);
+  const [userName, setUserName] = useState(remember ? email : "");
+  const [userPassword, setUserPassword] = useState(remember ? password : "");
   const login = async (event) => {
     event.preventDefault();
-    const userName = document.getElementById("username");
-    const password = document.getElementById("password");
-    const rememberMe = document.getElementById("remember-me");
-
-    console.log(remember);
 
     try {
-      const response = await getToken(userName.value, password.value);
+      const response = await getToken(userName, userPassword);
       if (!response.ok) {
         setAsError(true);
         throw new Error("Invalid login");
@@ -39,11 +36,16 @@ const Login = () => {
       const {
         body: { firstName, lastName },
       } = await userInfoResponse.json();
-      dispatcher(setUserInfos({ token, firstName, lastName }));
-      if (!!rememberMe.checked) {
-        dispatcher(setRemember());
-        console.log(remember);
-      }
+      dispatcher(
+        setUserInfos({
+          token,
+          firstName,
+          lastName,
+          email: userName,
+          password: userPassword,
+        })
+      );
+      dispatcher(setRemember({ remember: rememberMe }));
       setAsError(false);
       navigate("/user");
     } catch (error) {
@@ -63,7 +65,8 @@ const Login = () => {
               <input
                 type="text"
                 id="username"
-                defaultValue={remember ? email : ""}
+                value={userName}
+                onChange={(event) => setUserName(event.target.value)}
               />
             </div>
             <div className="input-wrapper">
@@ -71,12 +74,21 @@ const Login = () => {
               <input
                 type="password"
                 id="password"
-                defaultValue={remember ? password : ""}
+                value={userPassword}
+                onChange={(event) => setUserPassword(event.target.value)}
               />
             </div>
             {asError ? <p className="error">{errorMessage}</p> : ""}
             <div className="input-remember">
-              <input type="checkbox" id="remember-me" />
+              <input
+                type="checkbox"
+                id="remember-me"
+                checked={rememberMe}
+                onChange={(event) => {
+                  console.log(typeof event.currentTarget.checked);
+                  setRememberMe(event.currentTarget.checked);
+                }}
+              />
               <label htmlFor="remember-me">Remember me</label>
             </div>
             <button onClick={login} className="sign-in-button">

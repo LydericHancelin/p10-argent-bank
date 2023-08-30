@@ -14,20 +14,13 @@ const userSlice = createSlice({
 	initialState,
 	reducers: {
 		setUserInfos: (state, action) => {
-			state.firstName = action.payload.firstName
-			state.lastName = action.payload.lastName
-			state.email = action.payload.email
-			state.password = action.payload.password
-			state.token = action.payload.token
+			return { ...state, ...action.payload }
 		},
 		logout: (state, action) => {
-			state.firstName = null
-			state.lastName = null
-			state.token = null
+			return { ...state, firstName: null, lastName: null, token: null }
 		},
 		setRemember: (state, action) => {
-			console.log("rememberAction")
-			state.remember = true
+			return { ...state, remember: action.payload.remember }
 		}
 	},
 })
